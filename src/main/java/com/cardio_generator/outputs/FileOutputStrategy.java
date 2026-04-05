@@ -7,35 +7,49 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
+// mistake : this doc has also missing documentation - the only exception
+// is when code is easily understandle, which is not the case so therefore
+// javaDoc is necessary for class and constructor
+
+/**
+ * Writes patient data to label-specific text files in a configured directory.
+ */
 public class FileOutputStrategy implements OutputStrategy {
+    // mistake : variable or a field has to be written in lowerCamelCase, before it started with a capital letter
+    private String baseDirectory;
+    // mistake : it is not allowed to use _ for variables, only lowerCamelCase
+    // mistake : fields have to be private to ensure encapsulation
+    private final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>();
 
-    private String BaseDirectory;
-
-    public final ConcurrentHashMap<String, String> file_map = new ConcurrentHashMap<>();
-
+    // mistake : there should not be an extra unnecessary free line and javaDoc was forgotten - constructors with parameters need javaDoc
+    /**
+    * Creates a new FileOutputStrategy.
+    *
+    * @param baseDirectory the directory where output files will be stored
+    */
     public FileOutputStrategy(String baseDirectory) {
-
-        this.BaseDirectory = baseDirectory;
+        this.baseDirectory = baseDirectory;
     }
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         try {
             // Create the directory
-            Files.createDirectories(Paths.get(BaseDirectory));
+            Files.createDirectories(Paths.get(baseDirectory));
         } catch (IOException e) {
             System.err.println("Error creating base directory: " + e.getMessage());
             return;
         }
         // Set the FilePath variable
-        String FilePath = file_map.computeIfAbsent(label, k -> Paths.get(BaseDirectory, label + ".txt").toString());
+        // variable, has to start with small letter
+        String filePath = fileMap.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString());
 
         // Write the data to the file
         try (PrintWriter out = new PrintWriter(
-                Files.newBufferedWriter(Paths.get(FilePath), StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
+                Files.newBufferedWriter(Paths.get(filePath), StandardOpenOption.CREATE, StandardOpenOption.APPEND))) {
             out.printf("Patient ID: %d, Timestamp: %d, Label: %s, Data: %s%n", patientId, timestamp, label, data);
         } catch (Exception e) {
-            System.err.println("Error writing to file " + FilePath + ": " + e.getMessage());
+            System.err.println("Error writing to file " + filePath + ": " + e.getMessage());
         }
     }
 }
