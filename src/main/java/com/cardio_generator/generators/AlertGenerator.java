@@ -3,12 +3,19 @@ package com.cardio_generator.generators;
 import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
-
+/**
+ * Generates and tracks alert states for each patient.
+ */
 public class AlertGenerator implements PatientDataGenerator {
 
     public static final Random randomGenerator = new Random();
     private boolean[] AlertStates; // false = resolved, true = pressed
 
+    /**
+     * Creates an alert state array for a number of patients.
+     * 
+     * @param patientCount the number of patients to track their alert states
+     */
     public AlertGenerator(int patientCount) {
         AlertStates = new boolean[patientCount + 1];
     }

@@ -6,12 +6,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 
+/**
+ * Outputs patient health data to a connected TCP client.
+ */
 public class TcpOutputStrategy implements OutputStrategy {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private PrintWriter out;
 
+    /**
+     * Starts a TCP server on the specified port and accepts a singel client
+     * connection in a background thread. 
+     * 
+     * @param port the port number where a TCP server should start
+     */
     public TcpOutputStrategy(int port) {
         try {
             serverSocket = new ServerSocket(port);
