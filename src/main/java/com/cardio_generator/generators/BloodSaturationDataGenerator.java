@@ -13,6 +13,7 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
 
     /**
      * Takes in the number of patients and creates baseline saturation values for each patient.
+     * 
      * @param patientCount the number of patients for whom sturation levels are given
      */
     public BloodSaturationDataGenerator(int patientCount) {
