@@ -87,7 +87,7 @@ Once a valid HospitalPatient is retrieved, the system ensures that a correspondi
 The IdentityManager oversees the identification process and handles potential anomalies. If a patient ID cannot be matched with a hospital record, the IdentityManager manages the error through methods such as handleMismatch() or logIdentityError(). Additionally, it can create a new Patient monitoring object (class: Patient) when a valid hospital patient begins to be monitored.
 Summerized, this subsystem makes sure that every incoming datapoint will be reliably added to the correct patient before being processed further
 
-4) AlertGenerationSystem
+3) AlertGenerationSystem
 
 The Alert Generation System is responsible for detecting abnormal cardiovascular measurements and generating alerts for medical staff. Once a datapoint has been successfully identified and linked to a patient, the corresponding PatientData object is evaluated within this subsystem.
 The core component is the AlertGenerator, which receives incoming PatientData objects and evaluates them using the evaluate() method. Each datapoint contains a measurement value, timestamp, patient identifier, and a VitalType describing the type of vital sign being monitored. The AlertGenerator compares this measurement with the alert rules defined for the corresponding Patient.
@@ -96,7 +96,7 @@ If the AlertGenerator detects that a measurement exceeds the configured threshol
 The generated alert is then passed to the AlertManager, which is responsible for dispatching the alert to medical staff or other system components. This separation of responsibilities ensures that alert detection and alert distribution remain independent processes.
 This subsystem enables real-time monitoring of patient data and ensures that critical cardiovascular anomalies are detected and communicated promptly.
 
-6) DataStorageSystem
+4) DataStorageSystem
 
 The Data Storage System is responsible for securely storing and retrieving patient monitoring data within the CHMS. Once a PatientData-object has passed through the previous subsystems and has been linked to a patient, it is stored as a PatientData object. Each PatientData object represents a single measurement at a specific timestamp and contains information such as the patient identifier, the type of vital sign (VitalType), the measured value, and a version number. The version attribute allows the system to maintain data versioning, which can be useful when measurements are corrected or updated.
 The DataStorage class maintains a collection of patients using a map structure that associates patient identifiers with Patient objects. Each Patient object stores a list of its associated PatientData objects, allowing the system to efficiently organize monitoring data by patient.
