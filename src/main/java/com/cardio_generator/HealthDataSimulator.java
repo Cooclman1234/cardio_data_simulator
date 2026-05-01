@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Simulates health data for a group of patients.
  * 
- * <p> Generates and schedules ECG, blood saturation, blood pressure,
+ * <p>Generates and schedules ECG, blood saturation, blood pressure,
  * blood levels and alert data at configurable intervals. Output
  * can then be directed to a file, console, WebSocket or a TCP socket.
  */
@@ -40,7 +40,9 @@ public class HealthDataSimulator {
     private static final Random random = new Random();
 
     /**
-     * 
+     * Reads commandline arguments, creates a thread pool for parallel tasks, 
+     * generates a patient list and randomizes it to then start the data 
+     * generation process for every patient.
      * 
      * @param args
      * @throws IOException
@@ -160,7 +162,7 @@ public class HealthDataSimulator {
     /**
      * Schedules periodic health data generation tasks for each patient.
      * 
-     * @param patientIds the list of patients IDs to schedules teh data generation for
+     * @param patientIds the list of patients IDs to schedules the data generation for
      */
     private static void scheduleTasksForPatients(List<Integer> patientIds) {
         ECGDataGenerator ecgDataGenerator = new ECGDataGenerator(patientCount);
@@ -183,7 +185,7 @@ public class HealthDataSimulator {
      * 
      * @param task the Runnable task
      * @param period how often the task should be repeated after first run
-     * @param timeUnit the unit for delay adn period
+     * @param timeUnit the unit for delay and period
      */
     private static void scheduleTask(Runnable task, long period, TimeUnit timeUnit) {
         scheduler.scheduleAtFixedRate(task, random.nextInt(5), period, timeUnit);

@@ -30,7 +30,14 @@ public class FileOutputStrategy implements OutputStrategy {
     public FileOutputStrategy(String baseDirectory) {
         this.baseDirectory = baseDirectory;
     }
-
+    /**
+     * Creates a directory, defines a file path and writes one line containing patient data.
+     * 
+     * @param patientId unique patient identifier
+     * @param timestamp unique point in time
+     * @param label label for data type
+     * @param data the actual data
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         try {

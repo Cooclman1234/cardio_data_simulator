@@ -25,6 +25,12 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
         }
     }
 
+    /**
+     * Generates random blood saturation data and outputs it.
+     * 
+     * @param pateintId unique patient identifier
+     * @param outputStrategy chosen output type to output the generated data
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
