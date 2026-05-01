@@ -16,7 +16,7 @@ public class TcpOutputStrategy implements OutputStrategy {
     private PrintWriter out;
 
     /**
-     * Starts a TCP server on the specified port and accepts a singel client
+     * Starts a TCP server on the specified port and accepts a single client
      * connection in a background thread. 
      * 
      * @param port the port number where a TCP server should start
@@ -41,6 +41,14 @@ public class TcpOutputStrategy implements OutputStrategy {
         }
     }
 
+    /**
+     * Creates a message containing all important data about the patient in a string.
+     * 
+     * @param patientId unique patient identifier
+     * @param timestamp unique point in time
+     * @param label label for data type
+     * @param data the actual data
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         if (out != null) {
