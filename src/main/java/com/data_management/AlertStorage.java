@@ -36,5 +36,9 @@ public class AlertStorage {
     public void removeAlert(Alert alert) {
         this.alertList.remove(alert);
     }
+
+    public List<Alert> getAlerts() {
+        return alertList;
+    }
     
 }
