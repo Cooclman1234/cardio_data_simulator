@@ -1,0 +1,23 @@
+Overall Coverage : 75 % , 61% branches
+
+com.cardio_generator.generators - 94% / 68% 
+- covered most of the instructuions with tests for all cardio_generator_generators
+- the only missing paths are the probabilistsic path containing random
+
+com.cardio_generator.outputs - 95% / 55%
+- all outputs startegies were tested
+- missed branches are primarily defensive null checks and unreachable under normal usage
+
+com.alerts - 89 % / 69 %
+- tests written for all requirements mentioned in the manual
+- missed coverage contains edge cases, whihc need large datasets under normal usage
+
+com-cardio_generators - 47 % / 66%
+- HealthDataSimulator is the primary entry point with static methods
+- tests parseArgumetns, initalizePatientIds, scheduleTasksForPatients
+- other paths such as -h flag and System.exit() paths were not tested, as you would exit JVM during the test
+
+com.data_management - 48 % / 29 %
+- core DataStorage functionality was tested
+- untested: WebSocket client implementation and reader classes
+- reason: I would need live network conncetions, making them unsuitable for unit tests

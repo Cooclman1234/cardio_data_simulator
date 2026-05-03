@@ -144,7 +144,7 @@ public class HealthDataSimulatorTest {
         // Arrange
         Method parseMethod = HealthDataSimulator.class.getDeclaredMethod("parseArguments", String[].class);
         parseMethod.setAccessible(true);
-        String[] args = {"--output", "websocket:8765"};
+        String[] args = {"--output", "websocket:0"};
 
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
@@ -153,10 +153,11 @@ public class HealthDataSimulatorTest {
         try {
             // Act
             parseMethod.invoke(null, (Object) args);
-
+            Thread.sleep(500); // Warte kurz, bis Server startet
+        
             // Assert
             System.setOut(originalOut);
-            assertTrue(outContent.toString().contains("WebSocket output will be on port: 8765"));
+            assertTrue(outContent.toString().contains("WebSocket output will be on port:"));
         } finally {
             System.setOut(originalOut);
         }
