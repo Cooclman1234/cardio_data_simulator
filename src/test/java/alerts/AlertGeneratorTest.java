@@ -23,7 +23,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -42,7 +42,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 85.0, "Systolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 85.0, "Systolic Pressure", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -61,7 +61,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L); 
         db.addPatientData(1, 197.0, "Systolic Pressure", 1714376789051L);
         db.addPatientData(1, 208.0, "Systolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
@@ -82,7 +82,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L); 
         db.addPatientData(1, 78.0, "Systolic Pressure", 1714376789051L);
         db.addPatientData(1, 66.0, "Systolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
@@ -103,7 +103,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -122,7 +122,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -141,7 +141,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L); 
         db.addPatientData(1, 137.0, "Diastolic Pressure", 1714376789051L);
         db.addPatientData(1, 148.0, "Diastolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
@@ -162,7 +162,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L); 
         db.addPatientData(1, 44.0, "Diastolic Pressure", 1714376789051L);
         db.addPatientData(1, 32.0, "Diastolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
@@ -183,7 +183,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 88, "Saturation", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 88, "Saturation", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -202,7 +202,7 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 90, "Saturation", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 90, "Saturation", 1714376789050L); 
         db.addPatientData(1, 80, "Saturation", 1714376789051L);
         Patient patient = db.getAllPatients().get(0);
 
@@ -223,7 +223,7 @@ public class AlertGeneratorTest {
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
         db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L);
-        db.addPatientData(1, 88, "Saturation", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 88, "Saturation", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -243,7 +243,7 @@ public class AlertGeneratorTest {
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
         db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L);
-        db.addPatientData(1, 88, "Saturation", 1714376789050L); // über 180 → Alert erwartet
+        db.addPatientData(1, 88, "Saturation", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
