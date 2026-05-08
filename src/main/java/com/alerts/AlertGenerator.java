@@ -1,5 +1,6 @@
 package com.alerts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.data_management.AlertStorage;
@@ -12,13 +13,10 @@ import com.data_management.PatientRecord;
  * Monitors patient data and generates alerts when predefined health conditions are met.
  */
 public class AlertGenerator {
-    private static final long TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000L;
-
     private DataStorage dataStorage;
     private AlertStorage alertStorage;
+    private List<AlertStrategy> strategies;
     private final AlertFactory bloodPressureFactory = new BloodPressureAlertFactory();
-    private final AlertFactory bloodOxygenFactory = new BloodOxygenAlertFactory();
-    private final AlertFactory ecgFactory = new ECGAlertFactory();
 
 
     // mistake : the second line is unnecessary, contents just repeats what the param explaining line already explains.
@@ -30,11 +28,13 @@ public class AlertGenerator {
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
         this.alertStorage = new AlertStorage();
+        initStrategies();
     }
 
     public AlertGenerator(DataStorage dataStorage, AlertStorage alertStorage) {
         this.dataStorage = dataStorage;
         this.alertStorage = alertStorage;
+        initStrategies();
     }
 
     // mistake : the "will be triggered" somehow was wrapped in another line, even there is space in the line above it
@@ -48,186 +48,53 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        if (patient == null || this.dataStorage.getRecords(patient.getPatientId(), 1700000000000L, 1800000000000L).isEmpty()) {
+        if (patient == null) {
             return;
         }
-        List<PatientRecord> list = this.dataStorage.getRecords(patient.getPatientId(), 1700000000000L, 1800000000000L);
-        boolean lowSystolic = false;
-        boolean lowSaturation = false;
+
+        List<PatientRecord> records = this.dataStorage.getRecords(patient.getPatientId(), 1700000000000L, 1800000000000L);
+        if (records.isEmpty()) {
+            return;
+        }
+
+        for (AlertStrategy strategy : strategies) {
+            strategy.checkAlert(patient, records, alertStorage);
+        }
+
+        triggerHypotensiveHypoxemiaAlert(patient, records);
+    }
+
+    private void initStrategies() {
+        this.strategies = new ArrayList<>();
+        this.strategies.add(new BloodPressureSystolicStrategy());
+        this.strategies.add(new BloodPressureDiastolicStrategy());
+        this.strategies.add(new OxygenStrategySaturation());
+        this.strategies.add(new HeartRateStrategy());
+    }
+
+    private void triggerHypotensiveHypoxemiaAlert(Patient patient, List<PatientRecord> records) {
         long lastLowSystolicTimestamp = 0;
         long lastLowSaturationTimestamp = 0;
-        for (int i = 0; i < list.size(); i++) {
-            PatientRecord record = list.get(i);
-            String type = record.getRecordType();
-            if (type.equals("Systolic Pressure")) {
-                if (180 < record.getMeasurementValue()) {
-                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "high Systolic Pressure", record.getTimestamp());
-                    triggerAlert(a);
+        boolean lowSystolicFound = false;
+        boolean lowSaturationFound = false;
 
-                    if (hasIncreasingTrend(list, i, "Systolic Pressure")) {
-                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - increasing Systolic Pressure", record.getTimestamp());
-                        triggerAlert(trend);
-                    }
-                }
-
-                if (90 > record.getMeasurementValue()) {
-                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "low Systolic Pressure", record.getTimestamp());
-                    triggerAlert(a);
-                    lowSystolic = true;
-                    lastLowSystolicTimestamp = record.getTimestamp();
-
-                    if (hasDecreasingTrend(list, i, "Systolic Pressure")) {
-                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - decreasing Systolic Pressure", record.getTimestamp());
-                        triggerAlert(trend);
-                    }
-                }
-            } else if (type.equals("Diastolic Pressure")) {
-                if (120 < record.getMeasurementValue()) {
-                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "high Diastolic Pressure", record.getTimestamp());
-                    triggerAlert(a);
-
-                    if (hasIncreasingTrend(list, i, "Diastolic Pressure")) {
-                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - increasing Diastolic Pressure", record.getTimestamp());
-                        triggerAlert(trend);
-                    }
-                }
-
-                if (60 > record.getMeasurementValue()) {
-                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "low Diastolic Pressure", record.getTimestamp());
-                    triggerAlert(a);
-
-                    if (hasDecreasingTrend(list, i, "Diastolic Pressure")) {
-                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - decreasing Diastolic Pressure", record.getTimestamp());
-                        triggerAlert(trend);
-                    }
-                }
-            } else if (type.equals("Saturation")) {
-                if (92 > record.getMeasurementValue()) {
-                    Alert a = bloodOxygenFactory.createAlert(String.valueOf(patient.getPatientId()), "low Saturation", record.getTimestamp());
-                    triggerAlert(a);
-                    lowSaturation = true;
-                    lastLowSaturationTimestamp = record.getTimestamp();
-                }
-
-                if (hasRapidDrop(list, i, "Saturation")) {
-                    Alert rapidDrop = bloodOxygenFactory.createAlert(String.valueOf(patient.getPatientId()), "Rapid drop in Saturation",
-                            record.getTimestamp());
-                    triggerAlert(rapidDrop);
-                }
+        for (PatientRecord record : records) {
+            if ("Systolic Pressure".equals(record.getRecordType()) && record.getMeasurementValue() < 90) {
+                lowSystolicFound = true;
+                lastLowSystolicTimestamp = record.getTimestamp();
             }
-
-            if (lowSystolic && lowSaturation) {
-                Alert hha = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
-                        "Hypotensive Hypoxemia Alert", Math.max(lastLowSystolicTimestamp, lastLowSaturationTimestamp));
-                triggerAlert(hha);
-                lowSystolic = false;
-                lowSaturation = false;
-            }
-
-            if (type.equals("ECG")) {
-                if (isEcgPeakAlert(list, i)) {
-                    Alert a = ecgFactory.createAlert(String.valueOf(patient.getPatientId()), "Abnormal ECG peak", record.getTimestamp());
-                    triggerAlert(a);
-                }
-            } 
-        }
-    }
-
-
-
-    private boolean hasIncreasingTrend(List<PatientRecord> records, int currentIndex, String recordType) {
-        PatientRecord previousRecord = findPreviousRecord(records, currentIndex - 1, recordType);
-        if (previousRecord == null) {
-            return false;
-        }
-
-        int previousIndex = findPreviousRecordIndex(records, currentIndex - 1, recordType);
-        PatientRecord secondPreviousRecord = findPreviousRecord(records, previousIndex - 1, recordType);
-        if (secondPreviousRecord == null) {
-            return false;
-        }
-
-        double currentValue = records.get(currentIndex).getMeasurementValue();
-        double previousValue = previousRecord.getMeasurementValue();
-        double secondPreviousValue = secondPreviousRecord.getMeasurementValue();
-
-        return currentValue > previousValue + 10 && previousValue > secondPreviousValue + 10;
-    }
-
-    private boolean hasDecreasingTrend(List<PatientRecord> records, int currentIndex, String recordType) {
-        PatientRecord previousRecord = findPreviousRecord(records, currentIndex - 1, recordType);
-        if (previousRecord == null) {
-            return false;
-        }
-
-        int previousIndex = findPreviousRecordIndex(records, currentIndex - 1, recordType);
-        PatientRecord secondPreviousRecord = findPreviousRecord(records, previousIndex - 1, recordType);
-        if (secondPreviousRecord == null) {
-            return false;
-        }
-
-        double currentValue = records.get(currentIndex).getMeasurementValue();
-        double previousValue = previousRecord.getMeasurementValue();
-        double secondPreviousValue = secondPreviousRecord.getMeasurementValue();
-
-        return currentValue < previousValue - 10 && previousValue < secondPreviousValue - 10;
-    }
-
-    private boolean hasRapidDrop(List<PatientRecord> records, int currentIndex, String recordType) {
-        PatientRecord previousRecord = findPreviousRecord(records, currentIndex - 1, recordType);
-        if (previousRecord == null) {
-            return false;
-        }
-
-        long timeDifference = records.get(currentIndex).getTimestamp() - previousRecord.getTimestamp();
-        double valueDifference = previousRecord.getMeasurementValue() - records.get(currentIndex).getMeasurementValue();
-
-        return timeDifference <= TEN_MINUTES_IN_MILLIS && valueDifference >= 5;
-    }
-
-    private boolean isEcgPeakAlert(List<PatientRecord> records, int currentIndex) {
-        int windowSize = 10; 
-        int count = 0;
-        double sum = 0;
-
-        for (int i = currentIndex - 1; i >= 0 && count < windowSize; i--) {
-            if (records.get(i).getRecordType().equals("ECG")) {
-                sum += records.get(i).getMeasurementValue();
-                count++;
+            if ("Saturation".equals(record.getRecordType()) && record.getMeasurementValue() < 92) {
+                lowSaturationFound = true;
+                lastLowSaturationTimestamp = record.getTimestamp();
             }
         }
 
-        if (count == 0) {
-            return false; 
+        if (lowSystolicFound && lowSaturationFound) {
+            Alert hha = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                    "Hypotensive Hypoxemia Alert", Math.max(lastLowSystolicTimestamp, lastLowSaturationTimestamp));
+            triggerAlert(hha);
         }
-
-        double average = sum / count;
-        double currentValue = records.get(currentIndex).getMeasurementValue();
-
-        return currentValue > average * 1.5;
     }
-
-    private PatientRecord findPreviousRecord(List<PatientRecord> records, int startIndex, String recordType) {
-        int index = findPreviousRecordIndex(records, startIndex, recordType);
-        if (index < 0) {
-            return null;
-        }
-        return records.get(index);
-    }
-
-    private int findPreviousRecordIndex(List<PatientRecord> records, int startIndex, String recordType) {
-        for (int i = startIndex; i >= 0; i--) {
-            if (records.get(i).getRecordType().equals(recordType)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     /**
      * Triggers an alert for the monitoring system. Prints alert out in the consle and 
      * stores alert in AlertStorage

@@ -38,6 +38,16 @@ public class HealthDataSimulator {
     private static ScheduledExecutorService scheduler;
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
     private static final Random random = new Random();
+    private static HealthDataSimulator instance;
+
+    private HealthDataSimulator() {}
+
+    public HealthDataSimulator getInstance() {
+        if(instance == null) {
+            instance = new HealthDataSimulator();
+        }
+        return instance;
+    }
 
     /**
      * Reads commandline arguments, creates a thread pool for parallel tasks, 
