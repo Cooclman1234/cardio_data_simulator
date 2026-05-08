@@ -16,6 +16,9 @@ public class AlertGenerator {
 
     private DataStorage dataStorage;
     private AlertStorage alertStorage;
+    private final AlertFactory bloodPressureFactory = new BloodPressureAlertFactory();
+    private final AlertFactory bloodOxygenFactory = new BloodOxygenAlertFactory();
+    private final AlertFactory ecgFactory = new ECGAlertFactory();
 
 
     // mistake : the second line is unnecessary, contents just repeats what the param explaining line already explains.
@@ -58,70 +61,68 @@ public class AlertGenerator {
             String type = record.getRecordType();
             if (type.equals("Systolic Pressure")) {
                 if (180 < record.getMeasurementValue()) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "high Systolic Pressure", record.getTimestamp());
+                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "high Systolic Pressure", record.getTimestamp());
                     triggerAlert(a);
 
                     if (hasIncreasingTrend(list, i, "Systolic Pressure")) {
-                        Alert trend = new Alert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - increasing Systolic Pressure", record.getTimestamp(), "trend alert");
+                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                                "Trend alert - increasing Systolic Pressure", record.getTimestamp());
                         triggerAlert(trend);
                     }
                 }
 
                 if (90 > record.getMeasurementValue()) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "low Systolic Pressure", record.getTimestamp());
+                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "low Systolic Pressure", record.getTimestamp());
                     triggerAlert(a);
                     lowSystolic = true;
                     lastLowSystolicTimestamp = record.getTimestamp();
 
                     if (hasDecreasingTrend(list, i, "Systolic Pressure")) {
-                        Alert trend = new Alert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - decreasing Systolic Pressure", record.getTimestamp(), "trend alert");
+                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                                "Trend alert - decreasing Systolic Pressure", record.getTimestamp());
                         triggerAlert(trend);
                     }
                 }
             } else if (type.equals("Diastolic Pressure")) {
                 if (120 < record.getMeasurementValue()) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "high Diastolic Pressure", record.getTimestamp());
+                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "high Diastolic Pressure", record.getTimestamp());
                     triggerAlert(a);
 
                     if (hasIncreasingTrend(list, i, "Diastolic Pressure")) {
-                        Alert trend = new Alert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - increasing Diastolic Pressure", record.getTimestamp(), "trend alert");
+                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                                "Trend alert - increasing Diastolic Pressure", record.getTimestamp());
                         triggerAlert(trend);
                     }
                 }
 
                 if (60 > record.getMeasurementValue()) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "low Diastolic Pressure", record.getTimestamp());
+                    Alert a = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()), "low Diastolic Pressure", record.getTimestamp());
                     triggerAlert(a);
 
                     if (hasDecreasingTrend(list, i, "Diastolic Pressure")) {
-                        Alert trend = new Alert(String.valueOf(patient.getPatientId()),
-                                "Trend alert - decreasing Diastolic Pressure", record.getTimestamp(), "trend alert");
+                        Alert trend = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                                "Trend alert - decreasing Diastolic Pressure", record.getTimestamp());
                         triggerAlert(trend);
                     }
                 }
             } else if (type.equals("Saturation")) {
                 if (92 > record.getMeasurementValue()) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "low Saturation", record.getTimestamp(),
-                            "low saturation alert");
+                    Alert a = bloodOxygenFactory.createAlert(String.valueOf(patient.getPatientId()), "low Saturation", record.getTimestamp());
                     triggerAlert(a);
                     lowSaturation = true;
                     lastLowSaturationTimestamp = record.getTimestamp();
                 }
 
                 if (hasRapidDrop(list, i, "Saturation")) {
-                    Alert rapidDrop = new Alert(String.valueOf(patient.getPatientId()), "Rapid drop in Saturation",
-                            record.getTimestamp(), "rapid drop alert");
+                    Alert rapidDrop = bloodOxygenFactory.createAlert(String.valueOf(patient.getPatientId()), "Rapid drop in Saturation",
+                            record.getTimestamp());
                     triggerAlert(rapidDrop);
                 }
             }
 
             if (lowSystolic && lowSaturation) {
-                Alert hha = new Alert(String.valueOf(patient.getPatientId()),
-                        "Hypotensive Hypoxemia Alert", Math.max(lastLowSystolicTimestamp, lastLowSaturationTimestamp),
-                        "Hypotensive Hypoxemia alert");
+                Alert hha = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+                        "Hypotensive Hypoxemia Alert", Math.max(lastLowSystolicTimestamp, lastLowSaturationTimestamp));
                 triggerAlert(hha);
                 lowSystolic = false;
                 lowSaturation = false;
@@ -129,8 +130,7 @@ public class AlertGenerator {
 
             if (type.equals("ECG")) {
                 if (isEcgPeakAlert(list, i)) {
-                    Alert a = new Alert(String.valueOf(patient.getPatientId()), "Abnormal ECG peak", record.getTimestamp(),
-                            "ECG data alert");
+                    Alert a = ecgFactory.createAlert(String.valueOf(patient.getPatientId()), "Abnormal ECG peak", record.getTimestamp());
                     triggerAlert(a);
                 }
             } 

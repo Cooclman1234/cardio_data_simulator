@@ -13,6 +13,7 @@ import com.data_management.AlertStorage;
 public class HealthDataGenerator {
     private AlertStorage alertStorage;
     private Map<String, Alert> activeAlerts = new HashMap<>();
+    private ManualAlertFactory factory = new ManualAlertFactory();
 
     public HealthDataGenerator(AlertStorage alertStorage) {
         this.alertStorage = alertStorage;
@@ -26,7 +27,7 @@ public class HealthDataGenerator {
      * @return the generated Alert object
      */
     public Alert triggerAlert(String patientId) {
-        Alert alert = new Alert(patientId, "Manual alert triggered", System.currentTimeMillis(), "triggered alert");
+        Alert alert = factory.createAlert(patientId, "Manual alert triggered", System.currentTimeMillis());
         activeAlerts.put(patientId, alert);
         this.alertStorage.storeAlert(alert);
         System.out.println("ALERT TRIGGERED: Patient " + patientId + " | Time: " + alert.getTimestamp());
