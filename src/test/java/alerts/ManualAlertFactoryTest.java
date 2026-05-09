@@ -3,15 +3,12 @@ package alerts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.alerts.Alert;
-import com.alerts.HealthDataGenerator;
 import com.alerts.ManualAlertFactory;
-import com.data_management.AlertStorage;
-import com.data_management.DataStorage;
+
 
 public class ManualAlertFactoryTest {
     @Test

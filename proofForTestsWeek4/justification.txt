@@ -1,0 +1,4 @@
+- As the test shows, I tried to fully test all teh methods from each factory, strategy and decortator
+- I did not test the singleton class because it is just creating. global single version of the class.
+- For the srategy classes, I reorganized teh Alertgenerator class, as many tests for the specifc strategy classes were already inside teh AlertGeneratorTest.java, so i moved those.
+- Teh other 7% I missed are methods like constructors which were not for testing possible... Those were constructor just intiating a DataStorage object
