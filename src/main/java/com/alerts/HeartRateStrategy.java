@@ -23,7 +23,7 @@ public class HeartRateStrategy implements AlertStrategy {
 
 			if (isEcgPeakAlert(records, i)) {
 				Alert alert = ecgFactory.createAlert(
-						String.valueOf(patient.getPatientId()),
+						patient.getPatientId(),
 						"Abnormal ECG peak",
 						record.getTimestamp());
 				storeAlert(alert, alertStorage);

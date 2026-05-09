@@ -4,19 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.alerts.Alert;
 import com.alerts.HealthDataGenerator;
+import com.alerts.ManualAlertFactory;
 import com.data_management.AlertStorage;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 
 public class HealthDataGeneratorTest {
+    @BeforeEach
+    void setUp() {
+        DataStorage.resetInstance();
+    }
+
     @Test
     void testTriggerAlert() {
         // Arrange
-        DataStorage db = new DataStorage();
+        DataStorage db = DataStorage.getInstance();
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
 
@@ -24,7 +31,7 @@ public class HealthDataGeneratorTest {
         Patient patient = db.getAllPatients().get(0);
 
         // Act
-        alertGenerator.triggerAlert(String.valueOf(patient.getPatientId()));
+        alertGenerator.triggerAlert(patient.getPatientId());
 
         // Assert
         List<Alert> alerts = alertStorage.getAlerts();
@@ -35,7 +42,7 @@ public class HealthDataGeneratorTest {
     @Test
     void testUntriggerAlert() {
         // Arrange
-        DataStorage db = new DataStorage();
+        DataStorage db = DataStorage.getInstance();
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
 
@@ -43,26 +50,26 @@ public class HealthDataGeneratorTest {
         Patient patient = db.getAllPatients().get(0);
 
         // Act
-        alertGenerator.triggerAlert(String.valueOf(patient.getPatientId()));
+        alertGenerator.triggerAlert(patient.getPatientId());
         List<Alert> list = alertStorage.getAlerts();
-        alertGenerator.untriggerAlert(String.valueOf(patient.getPatientId()), list.get(0));
+        alertGenerator.untriggerAlert(patient.getPatientId(), list.get(0));
 
         // Assert
         List<Alert> alerts = alertStorage.getAlerts();
         assertEquals(0, alerts.size());
-        assertEquals(false, alertGenerator.isTriggered(String.valueOf(patient.getPatientId())));
-        assertEquals(null, alertGenerator.getActiveAlert(String.valueOf(patient.getPatientId())));
+        assertEquals(false, alertGenerator.isTriggered(patient.getPatientId()));
+        assertEquals(null, alertGenerator.getActiveAlert(patient.getPatientId()));
     }
 
     @Test
     void testIsTriggeredAndGetActiveAlert() {
         // Arrange
-        DataStorage db = new DataStorage();
+        DataStorage db = DataStorage.getInstance();
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
         db.addPatientData(1, 175.0, "Systolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
-        String patientId = String.valueOf(patient.getPatientId());
+        int patientId = patient.getPatientId();
 
         // Assert: not triggered before
         assertEquals(false, alertGenerator.isTriggered(patientId));
@@ -81,13 +88,14 @@ public class HealthDataGeneratorTest {
         // Arrange
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
-        Alert fakeAlert = new Alert("99", "Manual alert triggered", System.currentTimeMillis(), "triggered alert");
+        ManualAlertFactory factory = new ManualAlertFactory();
+        Alert fakeAlert = factory.createAlert(99, "Manual alert triggered", System.currentTimeMillis());
 
         // Act: untrigger on patient that was never triggered
-        alertGenerator.untriggerAlert("99", fakeAlert);
+        alertGenerator.untriggerAlert(99, fakeAlert);
 
         // Assert: storage unchanged, no active alert
         assertEquals(0, alertStorage.getAlerts().size());
-        assertEquals(false, alertGenerator.isTriggered("99"));
+        assertEquals(false, alertGenerator.isTriggered(99));
     }
 }

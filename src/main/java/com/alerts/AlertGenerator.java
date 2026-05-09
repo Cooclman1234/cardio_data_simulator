@@ -90,7 +90,7 @@ public class AlertGenerator {
         }
 
         if (lowSystolicFound && lowSaturationFound) {
-            Alert hha = bloodPressureFactory.createAlert(String.valueOf(patient.getPatientId()),
+            Alert hha = bloodPressureFactory.createAlert(patient.getPatientId(),
                     "Hypotensive Hypoxemia Alert", Math.max(lastLowSystolicTimestamp, lastLowSaturationTimestamp));
             triggerAlert(hha);
         }

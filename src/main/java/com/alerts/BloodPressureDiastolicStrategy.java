@@ -23,14 +23,14 @@ public class BloodPressureDiastolicStrategy implements AlertStrategy {
 
             if (record.getMeasurementValue() > 120) {
                 Alert high = bloodPressureFactory.createAlert(
-                        String.valueOf(patient.getPatientId()),
+                        patient.getPatientId(),
                         "high Diastolic Pressure",
                         record.getTimestamp());
                 storeAlert(high, alertStorage);
 
                 if (hasIncreasingTrend(records, i, "Diastolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
-                            String.valueOf(patient.getPatientId()),
+                            patient.getPatientId(),
                             "Trend alert - increasing Diastolic Pressure",
                             record.getTimestamp());
                     storeAlert(trend, alertStorage);
@@ -39,14 +39,14 @@ public class BloodPressureDiastolicStrategy implements AlertStrategy {
 
             if (record.getMeasurementValue() < 60) {
                 Alert low = bloodPressureFactory.createAlert(
-                        String.valueOf(patient.getPatientId()),
+                        patient.getPatientId(),
                         "low Diastolic Pressure",
                         record.getTimestamp());
                 storeAlert(low, alertStorage);
 
                 if (hasDecreasingTrend(records, i, "Diastolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
-                            String.valueOf(patient.getPatientId()),
+                            patient.getPatientId(),
                             "Trend alert - decreasing Diastolic Pressure",
                             record.getTimestamp());
                     storeAlert(trend, alertStorage);

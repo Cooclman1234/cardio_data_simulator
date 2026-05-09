@@ -2,7 +2,6 @@ package cardio_generators;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -12,10 +11,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.cardio_generator.generators.AlertGenerator;
 import com.cardio_generator.generators.BloodLevelsDataGenerator;
 import com.cardio_generator.outputs.OutputStrategy;
-import com.data_management.Patient;
+
 
 public class BloodLevelsDataGeneratorsTest {
     @Test

@@ -23,14 +23,14 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
 
             if (record.getMeasurementValue() > 180) {
                 Alert high = bloodPressureFactory.createAlert(
-                        String.valueOf(patient.getPatientId()),
+                        patient.getPatientId(),
                         "high Systolic Pressure",
                         record.getTimestamp());
                 storeAlert(high, alertStorage);
 
                 if (hasIncreasingTrend(records, i, "Systolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
-                            String.valueOf(patient.getPatientId()),
+                            patient.getPatientId(),
                             "Trend alert - increasing Systolic Pressure",
                             record.getTimestamp());
                     storeAlert(trend, alertStorage);
@@ -39,14 +39,14 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
 
             if (record.getMeasurementValue() < 90) {
                 Alert low = bloodPressureFactory.createAlert(
-                        String.valueOf(patient.getPatientId()),
+                        patient.getPatientId(),
                         "low Systolic Pressure",
                         record.getTimestamp());
                 storeAlert(low, alertStorage);
 
                 if (hasDecreasingTrend(records, i, "Systolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
-                            String.valueOf(patient.getPatientId()),
+                            patient.getPatientId(),
                             "Trend alert - decreasing Systolic Pressure",
                             record.getTimestamp());
                     storeAlert(trend, alertStorage);

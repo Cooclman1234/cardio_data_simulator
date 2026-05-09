@@ -36,7 +36,7 @@ public class AlertManager {
      * Triggers an alert, whihc simulates a manual alert signal.
      * @param patientId the patient from whom the alert is triggered 
      */
-    public void manualTrigger(String patientId) {
+    public void manualTrigger(int patientId) {
         healthDataGenerator.triggerAlert(patientId); 
     }
 
@@ -45,7 +45,7 @@ public class AlertManager {
      * 
      * @param patientId the patient from whom the alert is triggered 
      */
-    public void manualUntrigger(String patientId) {
+    public void manualUntrigger(int patientId) {
         Alert alert = healthDataGenerator.getActiveAlert(patientId);
         if (alert != null) {
             healthDataGenerator.untriggerAlert(patientId, alert);

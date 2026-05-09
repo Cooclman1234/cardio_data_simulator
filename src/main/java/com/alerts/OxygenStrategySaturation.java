@@ -24,7 +24,7 @@ public class OxygenStrategySaturation implements AlertStrategy {
 
 			if (record.getMeasurementValue() < 92) {
 				Alert low = bloodOxygenFactory.createAlert(
-						String.valueOf(patient.getPatientId()),
+						patient.getPatientId(),
 						"low Saturation",
 						record.getTimestamp());
 				storeAlert(low, alertStorage);
@@ -32,7 +32,7 @@ public class OxygenStrategySaturation implements AlertStrategy {
 
 			if (hasRapidDrop(records, i, "Saturation")) {
 				Alert rapidDrop = bloodOxygenFactory.createAlert(
-						String.valueOf(patient.getPatientId()),
+						patient.getPatientId(),
 						"Rapid drop in Saturation",
 						record.getTimestamp());
 				storeAlert(rapidDrop, alertStorage);

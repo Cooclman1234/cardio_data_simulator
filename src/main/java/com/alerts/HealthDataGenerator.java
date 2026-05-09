@@ -2,6 +2,7 @@ package com.alerts;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.data_management.AlertStorage;
 
@@ -11,12 +12,17 @@ import com.data_management.AlertStorage;
  * Alerts can be triggered and untriggered per patient.
  */
 public class HealthDataGenerator {
-    private AlertStorage alertStorage;
-    private Map<String, Alert> activeAlerts = new HashMap<>();
-    private ManualAlertFactory factory = new ManualAlertFactory();
+    private final AlertStorage alertStorage;
+    private final Map<Integer, Alert> activeAlerts = new HashMap<>();
+    private final ManualAlertFactory factory;
 
     public HealthDataGenerator(AlertStorage alertStorage) {
-        this.alertStorage = alertStorage;
+        this(alertStorage, new ManualAlertFactory());
+    }
+
+    public HealthDataGenerator(AlertStorage alertStorage, ManualAlertFactory factory) {
+        this.alertStorage = Objects.requireNonNull(alertStorage, "alertStorage must not be null");
+        this.factory = factory != null ? factory : new ManualAlertFactory();
     }
 
     /**
@@ -26,8 +32,8 @@ public class HealthDataGenerator {
      * @param patientId the ID of the patient triggering the alert
      * @return the generated Alert object
      */
-    public Alert triggerAlert(String patientId) {
-        Alert alert = factory.createAlert(patientId, "Manual alert triggered", System.currentTimeMillis());
+    public Alert triggerAlert(int patientId) {
+        Alert alert = this.factory.createAlert(patientId, "Manual alert triggered", System.currentTimeMillis());
         activeAlerts.put(patientId, alert);
         this.alertStorage.storeAlert(alert);
         System.out.println("ALERT TRIGGERED: Patient " + patientId + " | Time: " + alert.getTimestamp());
@@ -40,7 +46,7 @@ public class HealthDataGenerator {
      *
      * @param patientId the ID of the patient whose alert is being resolved
      */
-    public void untriggerAlert(String patientId, Alert alert) {
+    public void untriggerAlert(int patientId, Alert alert) {
         if (activeAlerts.containsKey(patientId)) {
             activeAlerts.remove(patientId);
             alertStorage.removeAlert(alert);
@@ -54,7 +60,7 @@ public class HealthDataGenerator {
      * @param patientId the ID of the patient to check
      * @return true if the patient has an active alert, false otherwise
      */
-    public boolean isTriggered(String patientId) {
+    public boolean isTriggered(int patientId) {
         return activeAlerts.containsKey(patientId);
     }
 
@@ -64,7 +70,7 @@ public class HealthDataGenerator {
      * @param patientId the ID of the patient
      * @return the active Alert, or null
      */
-    public Alert getActiveAlert(String patientId) {
+    public Alert getActiveAlert(int patientId) {
         return activeAlerts.get(patientId);
     }
 }
