@@ -44,6 +44,16 @@ public class DataStorage {
     }
 
     /**
+     * Loads data from the provided reader into this storage instance.
+     *
+     * @param reader the data reader implementation to use
+     * @throws IOException if reading fails
+     */
+    public void load(DataReader reader) throws IOException {
+        reader.readData(this);
+    }
+
+    /**
      * Adds or updates patient data in the storage.
      * If the patient does not exist, a new Patient object is created and added to
      * the storage.
