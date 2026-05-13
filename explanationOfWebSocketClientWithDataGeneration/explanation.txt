@@ -11,3 +11,5 @@ This file explains the extra files I have added to run the client server archite
 - it will also specifically print out alerts starting with "[ALERT]"
 
 - this proves that both client and server is working thorugh websocket
+
+use this to start the WebSocketSimulatorLauncher: mvn exec:java -Dexec.mainClass="com.cardio_generator.WebSocketSimulatorLauncher" -Dexec.args="--port 8080 --patient-count 50"
