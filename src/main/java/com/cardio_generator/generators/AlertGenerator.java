@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 /**
- * Generates and tracks alert states for each patient.
+ * Generates, tracks and evaluates alert states for each patient.
  */
 public class AlertGenerator implements PatientDataGenerator {
 

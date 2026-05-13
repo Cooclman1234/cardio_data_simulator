@@ -122,6 +122,42 @@ class WebSocketClientTest {
 
     @Test
     @Timeout(5)
+    void readDataShouldStoreAlertStateAsNumericValue() throws Exception {
+        // Arrange
+        TestWebSocketServer server = startServer(List.of("1,1715250000003,Alert,triggered"), true);
+        DataStorage storage = DataStorage.getInstance();
+        WebSocketClient client = new WebSocketClient(server.getWsUrl());
+
+        // Act
+        storage.load(client);
+
+        // Assert
+        List<PatientRecord> records = storage.getRecords(1, 1715250000003L, 1715250000003L);
+        assertEquals(1, records.size());
+        assertEquals("Alert", records.get(0).getRecordType());
+        assertEquals(1.0, records.get(0).getMeasurementValue());
+    }
+
+    @Test
+    @Timeout(5)
+    void readDataShouldParsePercentageFormattedValue() throws Exception {
+        // Arrange
+        TestWebSocketServer server = startServer(List.of("1,1715250000004,Saturation,97.0"), true);
+        DataStorage storage = DataStorage.getInstance();
+        WebSocketClient client = new WebSocketClient(server.getWsUrl());
+
+        // Act
+        storage.load(client);
+
+        // Assert
+        List<PatientRecord> records = storage.getRecords(1, 1715250000004L, 1715250000004L);
+        assertEquals(1, records.size());
+        assertEquals("Saturation", records.get(0).getRecordType());
+        assertEquals(97.0, records.get(0).getMeasurementValue());
+    }
+
+    @Test
+    @Timeout(5)
     void stopListeningShouldUnblockReadData() throws Exception {
         // Arrange
         TestWebSocketServer server = startServer(List.of(), false);
