@@ -28,7 +28,7 @@ public class OxygenStrategySaturationTest {
         AlertStorage alertStorage = new AlertStorage();
         OxygenStrategySaturation strategy = new OxygenStrategySaturation();
 
-        db.addPatientData(1, 88.0, "Saturation", 1714376789050L);
+        db.addPatientData("1", 88.0, "Saturation", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -48,8 +48,8 @@ public class OxygenStrategySaturationTest {
         AlertStorage alertStorage = new AlertStorage();
         OxygenStrategySaturation strategy = new OxygenStrategySaturation();
 
-        db.addPatientData(1, 90.0, "Saturation", 1714376789050L);
-        db.addPatientData(1, 80.0, "Saturation", 1714376789051L);
+        db.addPatientData("1", 90.0, "Saturation", 1714376789050L);
+        db.addPatientData("1", 80.0, "Saturation", 1714376789051L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 

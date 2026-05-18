@@ -64,8 +64,8 @@ public class FileReaderTest {
         reader.readData(storage);
 
         // Assert
-        List<PatientRecord> patientOneRecords = storage.getRecords(1, 1715250000000L, 1715250000010L);
-        List<PatientRecord> patientTwoRecords = storage.getRecords(2, 1715250000000L, 1715250000010L);
+        List<PatientRecord> patientOneRecords = storage.getRecords("1", 1715250000000L, 1715250000010L);
+        List<PatientRecord> patientTwoRecords = storage.getRecords("2", 1715250000000L, 1715250000010L);
         assertEquals(2, patientOneRecords.size());
         assertEquals(1, patientTwoRecords.size());
         assertEquals("ECG", patientOneRecords.get(0).getRecordType());
@@ -88,10 +88,10 @@ public class FileReaderTest {
         reader.readData(storage);
 
         // Assert
-        List<PatientRecord> patientThreeRecords = storage.getRecords(3, 1715250000000L, 1715250000010L);
+        List<PatientRecord> patientThreeRecords = storage.getRecords("3", 1715250000000L, 1715250000010L);
         assertEquals(1, patientThreeRecords.size());
         assertEquals(78.0, patientThreeRecords.get(0).getMeasurementValue());
-        assertTrue(storage.getRecords(99, 1715250000000L, 1715250000010L).isEmpty());
+        assertTrue(storage.getRecords("99", 1715250000000L, 1715250000010L).isEmpty());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class FileReaderTest {
         reader.readData(storage);
 
         // Assert
-        List<PatientRecord> patientFourRecords = storage.getRecords(4, 1715250000000L, 1715250000010L);
+        List<PatientRecord> patientFourRecords = storage.getRecords("4", 1715250000000L, 1715250000010L);
         assertEquals(1, patientFourRecords.size());
         assertEquals("DiastolicPressure", patientFourRecords.get(0).getRecordType());
     }

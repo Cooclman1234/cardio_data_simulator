@@ -14,7 +14,7 @@ import com.alerts.AlertGenerator;
  * patient IDs.
  */
 public class DataStorage {
-    private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+    private Map<String, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
     private static DataStorage instance;
 
 
@@ -66,7 +66,7 @@ public class DataStorage {
      * @param timestamp        the time at which the measurement was taken, in
      *                         milliseconds since the Unix epoch
      */
-    public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
+    public void addPatientData(String patientId, double measurementValue, String recordType, long timestamp) {
         Patient patient = patientMap.get(patientId);
         if (patient == null) {
             patient = new Patient(patientId);
@@ -88,7 +88,7 @@ public class DataStorage {
      * @return a list of PatientRecord objects that fall within the specified time
      *         range
      */
-    public List<PatientRecord> getRecords(int patientId, long startTime, long endTime) {
+    public List<PatientRecord> getRecords(String patientId, long startTime, long endTime) {
         Patient patient = patientMap.get(patientId);
         if (patient != null) {
             return patient.getRecords(startTime, endTime);
@@ -122,7 +122,7 @@ public class DataStorage {
         // reader.readData(storage);
 
         // Example of using DataStorage to retrieve and print records for a patient
-        List<PatientRecord> records = storage.getRecords(1, 1700000000000L, 1800000000000L);
+        List<PatientRecord> records = storage.getRecords("1", 1700000000000L, 1800000000000L);
         for (PatientRecord record : records) {
             System.out.println("Record for Patient ID: " + record.getPatientId() +
                     ", Type: " + record.getRecordType() +

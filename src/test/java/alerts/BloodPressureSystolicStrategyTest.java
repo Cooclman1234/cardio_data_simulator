@@ -28,7 +28,7 @@ public class BloodPressureSystolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureSystolicStrategy strategy = new BloodPressureSystolicStrategy();
 
-        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 185.0, "Systolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -48,7 +48,7 @@ public class BloodPressureSystolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureSystolicStrategy strategy = new BloodPressureSystolicStrategy();
 
-        db.addPatientData(1, 85.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 85.0, "Systolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -68,9 +68,9 @@ public class BloodPressureSystolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureSystolicStrategy strategy = new BloodPressureSystolicStrategy();
 
-        db.addPatientData(1, 185.0, "Systolic Pressure", 1714376789050L);
-        db.addPatientData(1, 197.0, "Systolic Pressure", 1714376789051L);
-        db.addPatientData(1, 208.0, "Systolic Pressure", 1714376789052L);
+        db.addPatientData("1", 185.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 197.0, "Systolic Pressure", 1714376789051L);
+        db.addPatientData("1", 208.0, "Systolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -90,9 +90,9 @@ public class BloodPressureSystolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureSystolicStrategy strategy = new BloodPressureSystolicStrategy();
 
-        db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L);
-        db.addPatientData(1, 78.0, "Systolic Pressure", 1714376789051L);
-        db.addPatientData(1, 66.0, "Systolic Pressure", 1714376789052L);
+        db.addPatientData("1", 89.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 78.0, "Systolic Pressure", 1714376789051L);
+        db.addPatientData("1", 66.0, "Systolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 

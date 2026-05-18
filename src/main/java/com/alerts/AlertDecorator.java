@@ -8,7 +8,7 @@ public class AlertDecorator implements Alert {
     }
 
     @Override
-    public int getPatientId() { 
+    public String getPatientId() { 
         return wrappedAlert.getPatientId(); 
     }
 

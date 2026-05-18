@@ -42,7 +42,7 @@ public class HealthDataSimulator {
 
     private HealthDataSimulator() {}
 
-    public HealthDataSimulator getInstance() {
+    public static HealthDataSimulator getInstance() {
         if(instance == null) {
             instance = new HealthDataSimulator();
         }

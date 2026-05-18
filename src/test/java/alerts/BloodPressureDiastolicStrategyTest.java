@@ -28,7 +28,7 @@ public class BloodPressureDiastolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureDiastolicStrategy strategy = new BloodPressureDiastolicStrategy();
 
-        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L);
+        db.addPatientData("1", 125.0, "Diastolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -48,7 +48,7 @@ public class BloodPressureDiastolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureDiastolicStrategy strategy = new BloodPressureDiastolicStrategy();
 
-        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L);
+        db.addPatientData("1", 55.0, "Diastolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -68,9 +68,9 @@ public class BloodPressureDiastolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureDiastolicStrategy strategy = new BloodPressureDiastolicStrategy();
 
-        db.addPatientData(1, 125.0, "Diastolic Pressure", 1714376789050L);
-        db.addPatientData(1, 137.0, "Diastolic Pressure", 1714376789051L);
-        db.addPatientData(1, 148.0, "Diastolic Pressure", 1714376789052L);
+        db.addPatientData("1", 125.0, "Diastolic Pressure", 1714376789050L);
+        db.addPatientData("1", 137.0, "Diastolic Pressure", 1714376789051L);
+        db.addPatientData("1", 148.0, "Diastolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 
@@ -90,9 +90,9 @@ public class BloodPressureDiastolicStrategyTest {
         AlertStorage alertStorage = new AlertStorage();
         BloodPressureDiastolicStrategy strategy = new BloodPressureDiastolicStrategy();
 
-        db.addPatientData(1, 55.0, "Diastolic Pressure", 1714376789050L);
-        db.addPatientData(1, 44.0, "Diastolic Pressure", 1714376789051L);
-        db.addPatientData(1, 32.0, "Diastolic Pressure", 1714376789052L);
+        db.addPatientData("1", 55.0, "Diastolic Pressure", 1714376789050L);
+        db.addPatientData("1", 44.0, "Diastolic Pressure", 1714376789051L);
+        db.addPatientData("1", 32.0, "Diastolic Pressure", 1714376789052L);
         Patient patient = db.getAllPatients().get(0);
         List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
 

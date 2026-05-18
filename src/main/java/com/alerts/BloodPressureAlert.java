@@ -1,18 +1,18 @@
 package com.alerts;
 
 public class BloodPressureAlert implements Alert{
-    private final int patientId;
+    private final String patientId;
     private final String condition;
     private final long timestamp;
 
-    public BloodPressureAlert(int patientId, String condition, long timestamp) {
+    public BloodPressureAlert(String patientId, String condition, long timestamp) {
         this.patientId = patientId;
         this.condition = condition;
         this.timestamp = timestamp;
     }
 
     @Override
-    public int getPatientId() {
+    public String getPatientId() {
         return patientId;
         
     }

@@ -27,7 +27,7 @@ public class HealthDataGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
 
-        db.addPatientData(1, 175.0, "Systolic Pressure", 1714376789050L); // normal
+        db.addPatientData("1", 175.0, "Systolic Pressure", 1714376789050L); // normal
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -46,7 +46,7 @@ public class HealthDataGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
 
-        db.addPatientData(1, 175.0, "Systolic Pressure", 1714376789050L); // normal
+        db.addPatientData("1", 175.0, "Systolic Pressure", 1714376789050L); // normal
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -67,9 +67,9 @@ public class HealthDataGeneratorTest {
         DataStorage db = DataStorage.getInstance();
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
-        db.addPatientData(1, 175.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 175.0, "Systolic Pressure", 1714376789050L);
         Patient patient = db.getAllPatients().get(0);
-        int patientId = patient.getPatientId();
+        String patientId = patient.getPatientId();
 
         // Assert: not triggered before
         assertEquals(false, alertGenerator.isTriggered(patientId));
@@ -89,13 +89,13 @@ public class HealthDataGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         HealthDataGenerator alertGenerator = new HealthDataGenerator(alertStorage);
         ManualAlertFactory factory = new ManualAlertFactory();
-        Alert fakeAlert = factory.createAlert(99, "Manual alert triggered", System.currentTimeMillis());
+        Alert fakeAlert = factory.createAlert("99", "Manual alert triggered", System.currentTimeMillis());
 
         // Act: untrigger on patient that was never triggered
-        alertGenerator.untriggerAlert(99, fakeAlert);
+        alertGenerator.untriggerAlert("99", fakeAlert);
 
         // Assert: storage unchanged, no active alert
         assertEquals(0, alertStorage.getAlerts().size());
-        assertEquals(false, alertGenerator.isTriggered(99));
+        assertEquals(false, alertGenerator.isTriggered("99"));
     }
 }

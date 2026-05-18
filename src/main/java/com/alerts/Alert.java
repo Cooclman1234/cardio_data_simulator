@@ -8,7 +8,7 @@ public interface Alert {
     /**
      * @return the unique patient identifier
      */
-    int getPatientId();
+    String getPatientId();
 
     /**
      * @return the condition or issue that triggered this alert

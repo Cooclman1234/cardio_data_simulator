@@ -43,8 +43,8 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 89.0, "Systolic Pressure", 1714376789050L);
-        db.addPatientData(1, 88, "Saturation", 1714376789050L); 
+        db.addPatientData("1", 89.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 88, "Saturation", 1714376789050L); 
         Patient patient = db.getAllPatients().get(0);
 
         // Act
@@ -63,8 +63,8 @@ public class AlertGeneratorTest {
         AlertStorage alertStorage = new AlertStorage();
         AlertGenerator alertGenerator = new AlertGenerator(db, alertStorage);
 
-        db.addPatientData(1, 100.0, "ECG", 1714376789050L);
-        db.addPatientData(1, 200.0, "ECG", 1714376789051L);
+        db.addPatientData("1", 100.0, "ECG", 1714376789050L);
+        db.addPatientData("1", 200.0, "ECG", 1714376789051L);
         Patient patient = db.getAllPatients().get(0);
 
         // Act

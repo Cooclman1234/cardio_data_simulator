@@ -62,9 +62,9 @@ class WebSocketClientTest {
         storage.load(client);
 
         // Assert
-        List<PatientRecord> records = storage.getRecords(1, 1715250000000L, 1715250000000L);
+        List<PatientRecord> records = storage.getRecords("1", 1715250000000L, 1715250000000L);
         assertEquals(1, records.size());
-        assertEquals(1, records.get(0).getPatientId());
+        assertEquals("1", records.get(0).getPatientId());
         assertEquals("ECG", records.get(0).getRecordType());
         assertEquals(82.5, records.get(0).getMeasurementValue());
     }
@@ -116,8 +116,8 @@ class WebSocketClientTest {
         storage.load(client);
 
         // Assert
-        assertEquals(2, storage.getRecords(1, 1715250000000L, 1715250000002L).size());
-        assertEquals(1, storage.getRecords(2, 1715250000000L, 1715250000002L).size());
+        assertEquals(2, storage.getRecords("1", 1715250000000L, 1715250000002L).size());
+        assertEquals(1, storage.getRecords("2", 1715250000000L, 1715250000002L).size());
     }
 
     @Test
@@ -132,7 +132,7 @@ class WebSocketClientTest {
         storage.load(client);
 
         // Assert
-        List<PatientRecord> records = storage.getRecords(1, 1715250000003L, 1715250000003L);
+        List<PatientRecord> records = storage.getRecords("1", 1715250000003L, 1715250000003L);
         assertEquals(1, records.size());
         assertEquals("Alert", records.get(0).getRecordType());
         assertEquals(1.0, records.get(0).getMeasurementValue());
@@ -150,7 +150,7 @@ class WebSocketClientTest {
         storage.load(client);
 
         // Assert
-        List<PatientRecord> records = storage.getRecords(1, 1715250000004L, 1715250000004L);
+        List<PatientRecord> records = storage.getRecords("1", 1715250000004L, 1715250000004L);
         assertEquals(1, records.size());
         assertEquals("Saturation", records.get(0).getRecordType());
         assertEquals(97.0, records.get(0).getMeasurementValue());

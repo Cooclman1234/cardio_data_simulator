@@ -30,7 +30,7 @@ public class FileReader implements DataReader{
     private void parseLine(String line, Path file, DataStorage dataStorage) {
         try {
             String[] parts = line.split(", ");
-            int patientId = Integer.parseInt(parts[0].split(": ")[1]);
+            String patientId = parts[0].split(": ")[1];
             long timestamp = Long.parseLong(parts[1].split(": ")[1]);
             String label = parts[2].split(": ")[1];
             double value = Double.parseDouble(parts[3].split(": ")[1]);

@@ -96,7 +96,7 @@ public class WebSocketClient implements DataReader {
                 return;
             }
 
-            int patientId = Integer.parseInt(parts[0].trim());
+            String patientId = parts[0].trim();
             long timestamp = Long.parseLong(parts[1].trim());
             String label = parts[2].trim();
             String rawValue = parts[3].trim();

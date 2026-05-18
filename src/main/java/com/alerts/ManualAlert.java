@@ -1,12 +1,12 @@
 package com.alerts;
 
 public class ManualAlert implements Alert {
-    private final int patientId;
+    private final String patientId;
     private final String condition;
     private final long timestamp;
     
-    public ManualAlert(int patientId, String condition, long timestamp) {
-        this.patientId = patientId;
+    public ManualAlert(String patientId2, String condition, long timestamp) {
+        this.patientId = patientId2;
         this.condition = condition;
         this.timestamp = timestamp;
     }
@@ -17,7 +17,7 @@ public class ManualAlert implements Alert {
     }
 
     @Override
-    public int getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 

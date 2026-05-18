@@ -1,18 +1,18 @@
 package com.alerts;
 
 public class BloodOxygenAlert implements Alert{
-    private final int patientId;
+    private final String patientId;
     private final String condition;
     private final long timestamp;
 
-    public BloodOxygenAlert(int patientId, String condition, long timestamp) {
+    public BloodOxygenAlert(String patientId, String condition, long timestamp) {
         this.patientId = patientId;
         this.condition = condition;
         this.timestamp = timestamp;
     }
 
     @Override
-    public int getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 

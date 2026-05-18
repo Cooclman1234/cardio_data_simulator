@@ -16,17 +16,17 @@ public class AlertDecoratorTest {
     @Test
     void testBaseDecoratorDelegatesAllFields() {
         // Arrange
-        Alert baseAlert = new ManualAlert(7, "Manual alert triggered", 1714376789050L);
+        Alert baseAlert = new ManualAlert("7", "Manual alert triggered", 1714376789050L);
         AlertDecorator decorator = new AlertDecorator(baseAlert);
 
         // Act
-        int patientId = decorator.getPatientId();
+        String patientId = decorator.getPatientId();
         String condition = decorator.getCondition();
         long timestamp = decorator.getTimestamp();
         String type = decorator.getType();
 
         // Assert
-        assertEquals(7, patientId);
+        assertEquals("7", patientId);
         assertEquals("Manual alert triggered", condition);
         assertEquals(1714376789050L, timestamp);
         assertEquals("Manual alert", type);
@@ -35,7 +35,7 @@ public class AlertDecoratorTest {
     @Test
     void testPriorityDecoratorAddsPriorityToType() {
         // Arrange
-        Alert baseAlert = new ManualAlert(8, "Manual alert triggered", 1714376789051L);
+        Alert baseAlert = new ManualAlert("8", "Manual alert triggered", 1714376789051L);
         PriorityAlertDecorator decorator = new PriorityAlertDecorator(baseAlert, "high");
 
         // Act
@@ -50,7 +50,7 @@ public class AlertDecoratorTest {
     @Test
     void testRepeatedDecoratorAddsRepeatMetadata() {
         // Arrange
-        Alert baseAlert = new ManualAlert(9, "Manual alert triggered", 1714376789052L);
+        Alert baseAlert = new ManualAlert("9", "Manual alert triggered", 1714376789052L);
         RepeatedAlertDecorator decorator = new RepeatedAlertDecorator(baseAlert, 3);
 
         // Act
@@ -67,7 +67,7 @@ public class AlertDecoratorTest {
     @Test
     void testDecoratorsCanBeChained() {
         // Arrange
-        Alert baseAlert = new ManualAlert(10, "Manual alert triggered", 1714376789053L);
+        Alert baseAlert = new ManualAlert("10", "Manual alert triggered", 1714376789053L);
         Alert chained = new PriorityAlertDecorator(new RepeatedAlertDecorator(baseAlert, 2), "critical");
 
         // Act
@@ -82,7 +82,7 @@ public class AlertDecoratorTest {
     @Test
     void testRepeatedDecoratorRejectsInvalidRepeatCount() {
         // Arrange
-        Alert baseAlert = new ManualAlert(11, "Manual alert triggered", 1714376789054L);
+        Alert baseAlert = new ManualAlert("11", "Manual alert triggered", 1714376789054L);
 
         // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> new RepeatedAlertDecorator(baseAlert, 1));
@@ -91,7 +91,7 @@ public class AlertDecoratorTest {
     @Test
     void testPriorityDecoratorRejectsBlankPriority() {
         // Arrange
-        Alert baseAlert = new ManualAlert(12, "Manual alert triggered", 1714376789055L);
+        Alert baseAlert = new ManualAlert("12", "Manual alert triggered", 1714376789055L);
 
         // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> new PriorityAlertDecorator(baseAlert, "  "));
