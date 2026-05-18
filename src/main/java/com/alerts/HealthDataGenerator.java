@@ -34,10 +34,11 @@ public class HealthDataGenerator {
      */
     public Alert triggerAlert(String patientId) {
         Alert alert = this.factory.createAlert(patientId, "Manual alert triggered", System.currentTimeMillis());
-        activeAlerts.put(patientId, alert);
-        this.alertStorage.storeAlert(alert);
-        System.out.println("ALERT TRIGGERED: Patient " + patientId + " | Time: " + alert.getTimestamp());
-        return alert;
+        Alert decoratedAlert = new PriorityAlertDecorator(alert, "MEDIUM");
+        activeAlerts.put(patientId, decoratedAlert);
+        this.alertStorage.storeAlert(decoratedAlert);
+        System.out.println("ALERT TRIGGERED: Patient " + patientId + " | Time: " + decoratedAlert.getTimestamp());
+        return decoratedAlert;
     }
 
     /**

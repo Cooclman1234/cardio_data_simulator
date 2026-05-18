@@ -26,14 +26,16 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
                         patient.getPatientId(),
                         "high Systolic Pressure",
                         record.getTimestamp());
-                storeAlert(high, alertStorage);
+                Alert decoratedHigh = new PriorityAlertDecorator(high, "HIGH");
+                storeAlert(decoratedHigh, alertStorage);
 
                 if (hasIncreasingTrend(records, i, "Systolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
                             patient.getPatientId(),
                             "Trend alert - increasing Systolic Pressure",
                             record.getTimestamp());
-                    storeAlert(trend, alertStorage);
+                    Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
+                    storeAlert(decoratedTrend, alertStorage);
                 }
             }
 
@@ -42,14 +44,16 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
                         patient.getPatientId(),
                         "low Systolic Pressure",
                         record.getTimestamp());
-                storeAlert(low, alertStorage);
+                Alert decoratedLow = new PriorityAlertDecorator(low, "HIGH");
+                storeAlert(decoratedLow, alertStorage);
 
                 if (hasDecreasingTrend(records, i, "Systolic Pressure")) {
                     Alert trend = bloodPressureFactory.createAlert(
                             patient.getPatientId(),
                             "Trend alert - decreasing Systolic Pressure",
                             record.getTimestamp());
-                    storeAlert(trend, alertStorage);
+                    Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
+                    storeAlert(decoratedTrend, alertStorage);
                 }
             }
         }

@@ -27,7 +27,8 @@ public class OxygenStrategySaturation implements AlertStrategy {
 						patient.getPatientId(),
 						"low Saturation",
 						record.getTimestamp());
-				storeAlert(low, alertStorage);
+				Alert decoratedLow = new PriorityAlertDecorator(low, "HIGH");
+				storeAlert(decoratedLow, alertStorage);
 			}
 
 			if (hasRapidDrop(records, i, "Saturation")) {
@@ -35,7 +36,8 @@ public class OxygenStrategySaturation implements AlertStrategy {
 						patient.getPatientId(),
 						"Rapid drop in Saturation",
 						record.getTimestamp());
-				storeAlert(rapidDrop, alertStorage);
+				Alert decoratedRapidDrop = new PriorityAlertDecorator(rapidDrop, "HIGH");
+				storeAlert(decoratedRapidDrop, alertStorage);
 			}
 		}
 	}

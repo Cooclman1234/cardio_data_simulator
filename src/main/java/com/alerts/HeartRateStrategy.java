@@ -26,7 +26,8 @@ public class HeartRateStrategy implements AlertStrategy {
 						patient.getPatientId(),
 						"Abnormal ECG peak",
 						record.getTimestamp());
-				storeAlert(alert, alertStorage);
+				Alert decoratedAlert = new PriorityAlertDecorator(alert, "HIGH");
+				storeAlert(decoratedAlert, alertStorage);
 			}
 		}
 	}
