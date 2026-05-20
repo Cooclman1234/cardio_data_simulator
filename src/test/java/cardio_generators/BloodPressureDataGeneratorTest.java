@@ -71,8 +71,8 @@ public class BloodPressureDataGeneratorTest {
 
         //Assert
         assertEquals(2,labels.size());
-        assertTrue(labels.contains("SystolicPressure")); //for learning: either one of them because patientCount = 1
-        assertTrue(labels.contains("DiastolicPressure"));
+        assertTrue(labels.contains("Systolic Pressure")); //for learning: either one of them because patientCount = 1
+        assertTrue(labels.contains("Diastolic Pressure"));
         assertTrue(values.size() == 2);
         assertTrue(ids.size() == 2); //for learning: two id values but same id...
         assertEquals(1, ids.get(0));        

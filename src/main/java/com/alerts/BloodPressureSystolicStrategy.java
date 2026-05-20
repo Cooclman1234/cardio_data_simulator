@@ -7,6 +7,10 @@ import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
 public class BloodPressureSystolicStrategy implements AlertStrategy {
+    private static final String RECORD_TYPE = "Systolic Pressure";
+    private static final double HIGH_THRESHOLD = 180;
+    private static final double LOW_THRESHOLD = 90;
+
     private final AlertFactory bloodPressureFactory = new BloodPressureAlertFactory();
 
     @Override
@@ -17,49 +21,50 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
 
         for (int i = 0; i < records.size(); i++) {
             PatientRecord record = records.get(i);
-            if (!"Systolic Pressure".equals(record.getRecordType())) {
+            if (!RECORD_TYPE.equals(record.getRecordType())) {
                 continue;
             }
 
-            if (record.getMeasurementValue() > 180) {
+            if (record.getMeasurementValue() > HIGH_THRESHOLD) {
                 Alert high = bloodPressureFactory.createAlert(
                         patient.getPatientId(),
                         "high Systolic Pressure",
                         record.getTimestamp());
                 Alert decoratedHigh = new PriorityAlertDecorator(high, "HIGH");
                 storeAlert(decoratedHigh, alertStorage);
-
-                if (hasIncreasingTrend(records, i, "Systolic Pressure")) {
-                    Alert trend = bloodPressureFactory.createAlert(
-                            patient.getPatientId(),
-                            "Trend alert - increasing Systolic Pressure",
-                            record.getTimestamp());
-                    Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
-                    storeAlert(decoratedTrend, alertStorage);
-                }
             }
 
-            if (record.getMeasurementValue() < 90) {
+            if (record.getMeasurementValue() < LOW_THRESHOLD) {
                 Alert low = bloodPressureFactory.createAlert(
                         patient.getPatientId(),
                         "low Systolic Pressure",
                         record.getTimestamp());
                 Alert decoratedLow = new PriorityAlertDecorator(low, "HIGH");
                 storeAlert(decoratedLow, alertStorage);
+            }
 
-                if (hasDecreasingTrend(records, i, "Systolic Pressure")) {
-                    Alert trend = bloodPressureFactory.createAlert(
-                            patient.getPatientId(),
-                            "Trend alert - decreasing Systolic Pressure",
-                            record.getTimestamp());
-                    Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
-                    storeAlert(decoratedTrend, alertStorage);
-                }
+            if (hasIncreasingTrend(records, i, RECORD_TYPE, LOW_THRESHOLD, HIGH_THRESHOLD)) {
+                Alert trend = bloodPressureFactory.createAlert(
+                        patient.getPatientId(),
+                        "Trend alert - increasing Systolic Pressure",
+                        record.getTimestamp());
+                Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
+                storeAlert(decoratedTrend, alertStorage);
+            }
+
+            if (hasDecreasingTrend(records, i, RECORD_TYPE, LOW_THRESHOLD, HIGH_THRESHOLD)) {
+                Alert trend = bloodPressureFactory.createAlert(
+                        patient.getPatientId(),
+                        "Trend alert - decreasing Systolic Pressure",
+                        record.getTimestamp());
+                Alert decoratedTrend = new RepeatedAlertDecorator(trend, 3);
+                storeAlert(decoratedTrend, alertStorage);
             }
         }
     }
 
-    private boolean hasIncreasingTrend(List<PatientRecord> records, int currentIndex, String recordType) {
+        private boolean hasIncreasingTrend(List<PatientRecord> records, int currentIndex, String recordType,
+            double lowThreshold, double highThreshold) {
         PatientRecord previousRecord = findPreviousRecord(records, currentIndex - 1, recordType);
         if (previousRecord == null) {
             return false;
@@ -75,10 +80,16 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
         double previousValue = previousRecord.getMeasurementValue();
         double secondPreviousValue = secondPreviousRecord.getMeasurementValue();
 
-        return currentValue > previousValue + 10 && previousValue > secondPreviousValue + 10;
+        boolean strongIncrease = currentValue > previousValue + 10 && previousValue > secondPreviousValue + 10;
+        boolean hasOutOfRangeValue = isOutsideNormalRange(currentValue, lowThreshold, highThreshold)
+            || isOutsideNormalRange(previousValue, lowThreshold, highThreshold)
+            || isOutsideNormalRange(secondPreviousValue, lowThreshold, highThreshold);
+
+        return strongIncrease && hasOutOfRangeValue;
     }
 
-    private boolean hasDecreasingTrend(List<PatientRecord> records, int currentIndex, String recordType) {
+        private boolean hasDecreasingTrend(List<PatientRecord> records, int currentIndex, String recordType,
+            double lowThreshold, double highThreshold) {
         PatientRecord previousRecord = findPreviousRecord(records, currentIndex - 1, recordType);
         if (previousRecord == null) {
             return false;
@@ -94,7 +105,16 @@ public class BloodPressureSystolicStrategy implements AlertStrategy {
         double previousValue = previousRecord.getMeasurementValue();
         double secondPreviousValue = secondPreviousRecord.getMeasurementValue();
 
-        return currentValue < previousValue - 10 && previousValue < secondPreviousValue - 10;
+        boolean strongDecrease = currentValue < previousValue - 10 && previousValue < secondPreviousValue - 10;
+        boolean hasOutOfRangeValue = isOutsideNormalRange(currentValue, lowThreshold, highThreshold)
+                || isOutsideNormalRange(previousValue, lowThreshold, highThreshold)
+                || isOutsideNormalRange(secondPreviousValue, lowThreshold, highThreshold);
+
+        return strongDecrease && hasOutOfRangeValue;
+    }
+
+    private boolean isOutsideNormalRange(double value, double lowThreshold, double highThreshold) {
+        return value < lowThreshold || value > highThreshold;
     }
 
     private PatientRecord findPreviousRecord(List<PatientRecord> records, int startIndex, String recordType) {

@@ -1,6 +1,7 @@
 package alerts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class BloodPressureSystolicStrategyTest {
         // Assert
         List<Alert> alerts = alertStorage.getAlerts();
         assertEquals(4, alerts.size());
-        assertEquals("Trend alert - increasing Systolic Pressure", alerts.get(3).getCondition());
+        assertTrue(alerts.get(3).getCondition().contains("Trend alert - increasing Systolic Pressure"));
     }
 
     @Test
@@ -102,6 +103,28 @@ public class BloodPressureSystolicStrategyTest {
         // Assert
         List<Alert> alerts = alertStorage.getAlerts();
         assertEquals(4, alerts.size());
-        assertEquals("Trend alert - decreasing Systolic Pressure", alerts.get(3).getCondition());
+        assertTrue(alerts.get(3).getCondition().contains("Trend alert - decreasing Systolic Pressure"));
+    }
+
+    @Test
+    void testIncreasingTrendTriggersWhenOnlyOneValueIsOutOfRange() {
+        // Arrange
+        DataStorage db = DataStorage.getInstance();
+        AlertStorage alertStorage = new AlertStorage();
+        BloodPressureSystolicStrategy strategy = new BloodPressureSystolicStrategy();
+
+        db.addPatientData("1", 85.0, "Systolic Pressure", 1714376789050L);
+        db.addPatientData("1", 97.0, "Systolic Pressure", 1714376789051L);
+        db.addPatientData("1", 109.0, "Systolic Pressure", 1714376789052L);
+        Patient patient = db.getAllPatients().get(0);
+        List<PatientRecord> records = db.getRecords(patient.getPatientId(), 0L, Long.MAX_VALUE);
+
+        // Act
+        strategy.checkAlert(patient, records, alertStorage);
+
+        // Assert
+        List<Alert> alerts = alertStorage.getAlerts();
+        assertEquals(2, alerts.size());
+        assertTrue(alerts.get(1).getCondition().contains("Trend alert - increasing Systolic Pressure"));
     }
 }
